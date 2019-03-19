@@ -11,8 +11,6 @@ class LeftBar extends Component {
         this.state = {
             list: []
         }
-        this.updateButtonValue=props.updateButtonValue
-
     }
 
     componentWillMount() {
@@ -35,9 +33,6 @@ class LeftBar extends Component {
         })
     }
 
-    handleUpdate = ()=>{
-        this.updateButtonValue()
-    }
 
     render() {
         return(
@@ -55,7 +50,6 @@ class LeftBar extends Component {
                             <Col md='3'><Button
                                 variant="success"
                                 className='float-right'
-                                onClick = {this.handleUpdate.bind(this)}
                             >Update</Button></Col>
                         </Row>
                     </div>
@@ -67,6 +61,10 @@ class LeftBar extends Component {
                         <p><b>Region:</b>{item.region}</p>
                         <p><b>Country:</b>{item.country}</p>
                         <p><b>Street:</b>{item.street}</p>
+                        <p><b>Geo:</b>{item.geo}</p>
+                        <p><b>Zip Code:</b>{item.zip}</p>
+                        <p><b>Date:</b>{new Date(+item.date).toDateString()}</p>
+                        <p><b>User:</b>{item.userid}</p>
                         <Row className='m-0'>
                             <Col md='9'><Button
                                 variant="danger"
@@ -75,7 +73,6 @@ class LeftBar extends Component {
                             >Delete</Button></Col>
                             <Col md='3'><Button variant="success"
                                                 className='float-right'
-                                                onClick = {this.handleUpdate.bind(this)}
                             >Update</Button></Col>
                         </Row>
                     </div>

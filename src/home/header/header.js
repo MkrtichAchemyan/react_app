@@ -1616,20 +1616,17 @@ class Header extends Component {
                     userid: 100
                 }
             ],
-            buttonValue: 'Add'
         };
     }
-    updateButtonValue(){
-        if (this.state.buttonValue === "Add") {
-            this.setState({
-                buttonValue:'Update'
-            })
-        }
-        if (this.state.buttonValue === "Update") {
-            this.setState({
-                buttonValue:'Add'
-            })
-        }
+
+    addUser = (user)=>{
+        this.state.users.unshift(user)
+        this.setState({users:this.state.users})
+    }
+
+    addPointer = (pointer)=>{
+        this.state.pointers.unshift(pointer)
+        this.setState({pointers:this.state.pointers})
     }
 
     render() {
@@ -1638,25 +1635,24 @@ class Header extends Component {
                 id="controlled-tab-example"
                 activeKey={this.state.key}
                 onSelect={key => this.setState({ key })}
-                onClick={this.updateButtonValue.bind(this)}
             >
                 <Tab eventKey="users" title="Users">
                     <Row className='m-0'>
                         <Col md='4' className='leftbar'>
-                            <LeftBar users={ this.state.users} type='users' updateButtonValue={this.updateButtonValue.bind(this)}/>
+                            <LeftBar users={ this.state.users} type='users'/>
                         </Col>
                         <Col md='8' className='content'>
-                            <Content users={ this.state.users} type='users' buttonValue = {this.state.buttonValue}/>
+                            <Content users={ this.state.users} type='users' addUser={this.addUser}/>
                         </Col>
                     </Row>
                 </Tab>
                 <Tab eventKey="pointers" title="Pointers">
                     <Row className='m-0'>
                         <Col md='4' className='leftbar'>
-                            <LeftBar pointers={this.state.pointers} type='pointers' updateButtonValue={this.updateButtonValue.bind(this)}/>
+                            <LeftBar pointers={this.state.pointers} type='pointers'/>
                         </Col>
                         <Col md='8' className='content'>
-                            <Content users={ this.state.pointers} type='pointers' buttonValue = {this.state.buttonValue}/>
+                            <Content pointers={ this.state.pointers} users={ this.state.users} type='pointers' addPointer={this.addPointer}/>
                         </Col>
                     </Row>
                 </Tab>
