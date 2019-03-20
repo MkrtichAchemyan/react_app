@@ -10,6 +10,8 @@ class Content extends Component{
         this.state = {
                 userName:'',
                 userEmail:'',
+                userId:'',
+                pointerId:"",
                 pointerCountry:'',
                 pointerRegion:'',
                 pointerCity:'',
@@ -17,10 +19,39 @@ class Content extends Component{
                 pointerStreet:'',
                 pointerUser:'',
                 pointerGeo:'',
-                pointerDate:''
+                pointerDate:'',
+                userButtonValue: this.props.userButtonValue,
+                pointerButtonValue: this.props.pointerButtonValue
             };
         this.addUser = this.props.addUser
         this.addPointer = this.props.addPointer
+        this.updateUser = this.props.updateUser
+        this.updatePointer = this.props.updatePointer
+    }
+
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps,"66666666666666666")
+        if (this.props.type === 'users'){
+            this.setState({
+                userName:nextProps.userFields.name,
+                userEmail:nextProps.userFields.email,
+                userId:nextProps.userFields.id,
+                userButtonValue:nextProps.userButtonValue
+            })
+        }
+        else if (this.props.type === 'pointers'){
+            this.setState({
+                pointerCountry:nextProps.pointerFields.country,
+                pointerRegion:nextProps.pointerFields.region,
+                pointerCity:nextProps.pointerFields.city,
+                pointerZipCode:nextProps.pointerFields.zip,
+                pointerStreet:nextProps.pointerFields.street,
+                pointerUser:nextProps.pointerFields.userid,
+                pointerGeo:nextProps.pointerFields.geo,
+                pointerDate:nextProps.pointerFields.date,
+                pointerButtonValue: this.props.pointerButtonValue
+            })
+        }
     }
 
     //user handlers
@@ -62,7 +93,9 @@ class Content extends Component{
     }
 
     handlerPointerDate = (event)=>{
-        this.setState({pointerDate:event.target.value});
+        let old_date = event.target.value;
+        let new_Date = new Date(old_date).getTime()
+        this.setState({pointerDate:new_Date});
     }
 
     handleUserSubmit = ()=>{
@@ -74,6 +107,15 @@ class Content extends Component{
         this.addUser(data)
         document.getElementById("userForm").reset();
     }
+    handleUserUpdateSubmit = ()=>{
+        const data = {
+            id:  this.state.userId,
+            name: this.state.userName,
+            email: this.state.userEmail
+        };
+        this.updateUser(data)
+        document.getElementById("userForm").reset();
+    }
 
     handlePointerSubmit = ()=>{
         const data = {
@@ -83,11 +125,27 @@ class Content extends Component{
             city:this.state.pointerCity,
             zip:this.state.pointerZipCode,
             street:this.state.pointerStreet,
-            userid:this.state.pointerUser,
+            userid:+this.state.pointerUser,
             geo:this.state.pointerGeo,
             date:this.state.pointerDate
         };
         this.addPointer(data)
+        document.getElementById("pointerForm").reset();
+    }
+
+    handlePointerUpdateSubmit = ()=>{
+        const data = {
+            id: this.state.pointerId,
+            country:this.state.pointerCountry,
+            region:this.state.pointerRegion,
+            city:this.state.pointerCity,
+            zip:this.state.pointerZipCode,
+            street:this.state.pointerStreet,
+            userid:+this.state.pointerUser,
+            geo:this.state.pointerGeo,
+            date:this.state.pointerDate
+        };
+        this.updatePointer(data)
         document.getElementById("pointerForm").reset();
     }
 
@@ -98,13 +156,14 @@ class Content extends Component{
                          <Form id='userForm'>
                              <Form.Group controlId="formBasicName">
                                  <Form.Label><b>Name</b></Form.Label>
-                                 <Form.Control type="text" placeholder="Name" onChange={this.handleChangeUserName}/>
+                                 <input type="text" placeholder="Name" className='form-control' value={this.state.userName} onChange={this.handleChangeUserName}/>
+                                 <input type="hidden" placeholder="Name" className='form-control' value={this.state.userId}/>
                              </Form.Group>
                              <Form.Group controlId="formBasicEmail">
                                  <Form.Label><b>Email</b></Form.Label>
-                                 <Form.Control type="email" placeholder="Email" onChange={this.handleChangeUserEmail}/>
+                                 <input type="email" placeholder="Email" className='form-control' value={this.state.userEmail} onChange={this.handleChangeUserEmail}/>
                              </Form.Group>
-                             <Button variant="primary" type="button" className="float-right" onClick={this.handleUserSubmit}>Add</Button>
+                             <Button variant="primary" type="button" className="float-right" onClick={this.state.userButtonValue==='Add'?this.handleUserSubmit:this.handleUserUpdateSubmit}>{this.state.userButtonValue}</Button>
                          </Form>
                      </div>
                     :<div className='formContent'>
@@ -112,31 +171,31 @@ class Content extends Component{
                         <Form.Row>
                             <Form.Group as={Col} controlId="formGridCountry">
                                 <Form.Label><b>Country</b></Form.Label>
-                                <Form.Control type="text" placeholder="Country" onChange={this.handlerPointerCountry}/>
+                                <input value={this.state.pointerCountry} className='form-control' type="text" placeholder="Country" onChange={this.handlerPointerCountry}/>
                             </Form.Group>
 
                             <Form.Group as={Col} controlId="formGridRegion">
                                 <Form.Label><b>Region</b></Form.Label>
-                                <Form.Control type="text" placeholder="Region" onChange={this.handlerPointerRegion}/>
+                                <input value={this.state.pointerRegion} className='form-control' type="text" placeholder="Region" onChange={this.handlerPointerRegion}/>
                             </Form.Group>
                         </Form.Row>
 
                         <Form.Row>
                             <Form.Group as={Col} controlId="formGridCity">
                                 <Form.Label><b>City</b></Form.Label>
-                                <Form.Control placeholder="City" onChange={this.handlerPointerCity}/>
+                                <input value={this.state.pointerCity} className='form-control' placeholder="City" onChange={this.handlerPointerCity}/>
                             </Form.Group>
 
                             <Form.Group as={Col} controlId="formGridZipcode">
                                 <Form.Label><b>Zipcode</b></Form.Label>
-                                <Form.Control placeholder="Zipcode" onChange={this.handlerPointerZipCode}/>
+                                <input value={this.state.pointerZipCode} className='form-control' placeholder="Zipcode" onChange={this.handlerPointerZipCode}/>
                             </Form.Group>
                         </Form.Row>
 
                         <Form.Row>
                             <Form.Group as={Col} controlId="formStreet">
                                 <Form.Label><b>Street</b></Form.Label>
-                                <Form.Control placeholder="Street" onChange={this.handlerPointerStreet}/>
+                                <input value={this.state.pointerStreet} className='form-control' placeholder="Street" onChange={this.handlerPointerStreet}/>
                             </Form.Group>
 
                             <Form.Group as={Col} controlId="formUser">
@@ -153,15 +212,15 @@ class Content extends Component{
                         <Form.Row>
                             <Form.Group as={Col} controlId="formGeo">
                                 <Form.Label><b>Gelocation</b></Form.Label>
-                                <Form.Control placeholder="Gelocation" onChange={this.handlerPointerGeo}/>
+                                <input value={this.state.pointerGeo} className='form-control' placeholder="Gelocation" onChange={this.handlerPointerGeo}/>
                             </Form.Group>
 
                             <Form.Group as={Col} controlId="formDate">
                                 <Form.Label><b>Date</b></Form.Label>
-                                <Form.Control placeholder="Date" onChange={this.handlerPointerDate}/>
+                                <Form.Control type='date' placeholder="Date" onChange={this.handlerPointerDate}/>
                             </Form.Group>
                         </Form.Row>
-                        <Button variant="primary" type="button" className="float-right" onClick={this.handlePointerSubmit}>Add</Button>
+                        <Button variant="primary" type="button" className="float-right" onClick={this.state.pointerButtonValue==='Add'?this.handlePointerSubmit:this.handlePointerUpdateSubmit}>{this.state.pointerButtonValue}</Button>
                     </Form>
                      </div>
                 )

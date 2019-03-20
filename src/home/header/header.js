@@ -1616,6 +1616,24 @@ class Header extends Component {
                     userid: 100
                 }
             ],
+            userButtonValue:'Add',
+            pointerButtonValue:'Add',
+            userFields:{
+                id:'',
+                name:'',
+                email:''
+            },
+            pointerFields:{
+                street: '',
+                city: '',
+                zip: '',
+                region: '',
+                country: '',
+                geo: '',
+                date: '',
+                id: '',
+                userid: ''
+            }
         };
     }
 
@@ -1628,6 +1646,62 @@ class Header extends Component {
         this.state.pointers.unshift(pointer)
         this.setState({pointers:this.state.pointers})
     }
+    changeUserFields = (user)=>{
+            this.setState({
+                userFields:user,
+                userButtonValue:"Update"
+            })
+    }
+    changePointerFields = (pointer)=>{
+        this.setState({
+            pointerFields:pointer,
+            pointerButtonValue:"Update"
+        })
+        console.log(this.state);
+    }
+    updateUser=(user)=>{
+        this.state.users.forEach((elem)=>{
+            if (elem.id===user.id){
+                let index = this.state.users.indexOf(elem)
+                let users = this.state.users
+                users[index] = user
+                this.setState({
+                    users:users,
+                    userFields:{
+                        id:'',
+                        name:'',
+                        email:''
+                    },
+                    userButtonValue:"Add"
+                })
+            }
+        })
+    }
+
+    updatePointer=(pointer)=>{
+        this.state.pointers.forEach((elem)=>{
+            if (elem.id===pointer.id){
+                let index = this.state.users.indexOf(elem)
+                let pointers = this.state.users
+                pointers[index] = pointer
+                this.setState({
+                    pointers:pointers,
+                    pointerFields:{
+                        street: '',
+                        city: '',
+                        zip: '',
+                        region: '',
+                        country: '',
+                        geo: '',
+                        date: '',
+                        id: '',
+                        userid: ''
+                    },
+                    pointerButtonValue:"Add"
+                })
+            }
+        })
+    }
 
     render() {
         return (
@@ -1639,20 +1713,42 @@ class Header extends Component {
                 <Tab eventKey="users" title="Users">
                     <Row className='m-0'>
                         <Col md='4' className='leftbar'>
-                            <LeftBar users={ this.state.users} type='users'/>
+                            <LeftBar
+                                users={ this.state.users}
+                                type='users'
+                                changeUserFields={this.changeUserFields}
+                            />
                         </Col>
                         <Col md='8' className='content'>
-                            <Content users={ this.state.users} type='users' addUser={this.addUser}/>
+                            <Content users={ this.state.users}
+                                     type='users'
+                                     addUser={this.addUser}
+                                     updateUser = {this.updateUser}
+                                     userButtonValue={this.state.userButtonValue}
+                                     userFields={this.state.userFields}
+                            />
                         </Col>
                     </Row>
                 </Tab>
                 <Tab eventKey="pointers" title="Pointers">
                     <Row className='m-0'>
                         <Col md='4' className='leftbar'>
-                            <LeftBar pointers={this.state.pointers} type='pointers'/>
+                            <LeftBar
+                                pointers={this.state.pointers}
+                                users={this.state.users}
+                                type='pointers'
+                                changePointerFields={this.changePointerFields}
+                            />
                         </Col>
                         <Col md='8' className='content'>
-                            <Content pointers={ this.state.pointers} users={ this.state.users} type='pointers' addPointer={this.addPointer}/>
+                            <Content pointers={ this.state.pointers}
+                                     users={ this.state.users}
+                                     type='pointers'
+                                     addPointer={this.addPointer}
+                                     updatePointer = {this.updatePointer}
+                                     pointerButtonValue={this.state.pointerButtonValue}
+                                     pointerFields={this.state.pointerFields}
+                            />
                         </Col>
                     </Row>
                 </Tab>
