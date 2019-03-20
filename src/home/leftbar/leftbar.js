@@ -30,6 +30,15 @@ class LeftBar extends Component {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (this.props.type === 'pointers'){
+            this.setState({
+                list:nextProps.pointers
+            })
+            console.log(this.state,"kkkkkkkkkkkkk");
+        }
+    }
+
     handleDelete = (index)=>{
         this.state.list.splice(index,1)
         this.setState({
@@ -46,34 +55,42 @@ class LeftBar extends Component {
         this.sendpointerFields(data)
     }
 
-    // filterPointer = (event)=>{
-    //     this.props.pointers.find((pointer)=>{
-    //         if ( pointer.userid === +event.target.value) {
-    //             this.state.list = []
-    //             this.state.list.unshift(pointer)
-    //             console.log(this.state.list)
-    //             this.setState(this.state)
-    //             console.log(this.state.list)
-    //         }
-    //         else{
-    //             this.setState({
-    //                 list: this.props.pointers
-    //             })
-    //         }
-    //     })
-    // }
+    filterPointer = (event)=>{
+        let pointers = [];
+        this.props.pointers.forEach((pointer)=>{
+            if ( pointer.userid === +event.target.value) {
+                pointers.push(pointer)
+                console.log(pointers,"aaaaaaaaaaaaa")
+                this.setState({
+                    list:pointers
+                })
+            }
+            else if(event.target.value==="All"){
+                console.log("bbbbbbbbbbbbbb")
+                let list = this.props.pointers
+                this.setState({
+                    list:list
+                })
+            }
+            else{
+                this.setState({
+                    list:pointers
+                })
+            }
+        })
+    }
+
 
 
     render() {
         const {type} = this.props
         const {users} = this.props
         return(
-                 <div>
-                    {type !== 'users' && <div>
+                 <div className='pt-2'>
+                    {type === 'pointers' && <div>
                         <Form.Group as={Col} controlId="formUser">
-                            <Form.Label><b>User</b></Form.Label>
                             <Form.Control as="select"
-                                          // onChange={this.filterPointer}
+                                          onChange={this.filterPointer}
                             >
                                 <option value="All">All</option>
                                 {users.map((user, index) => {
@@ -108,7 +125,7 @@ class LeftBar extends Component {
                             <p><b>Geo:</b>{item.geo}</p>
                             <p><b>Zip Code:</b>{item.zip}</p>
                             <p><b>Date:</b>{new Date(+item.date).toDateString()}</p>
-                            <p><b>User:</b>{users.find((elem)=>elem.id === item.userid).name}</p>
+                            {/*<p><b>User:</b>{users.find((elem)=>elem.id === item.userid).name}</p>*/}
                             <Row className='m-0'>
                                 <Col md='9'><Button
                                     variant="danger"

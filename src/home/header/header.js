@@ -1653,13 +1653,13 @@ class Header extends Component {
             })
     }
     changePointerFields = (pointer)=>{
-        this.setState({
-            pointerFields:pointer,
-            pointerButtonValue:"Update"
-        })
-        console.log(this.state);
+            this.setState({
+                pointerFields:pointer,
+                pointerButtonValue:"Update"
+            })
     }
-    updateUser=(user)=>{
+
+    updateUser = (user)=>{
         this.state.users.forEach((elem)=>{
             if (elem.id===user.id){
                 let index = this.state.users.indexOf(elem)
@@ -1678,11 +1678,12 @@ class Header extends Component {
         })
     }
 
-    updatePointer=(pointer)=>{
+    updatePointer = (pointer)=>{
+        console.log(pointer);
         this.state.pointers.forEach((elem)=>{
             if (elem.id===pointer.id){
-                let index = this.state.users.indexOf(elem)
-                let pointers = this.state.users
+                let index = this.state.pointers.indexOf(elem)
+                let pointers = this.state.pointers
                 pointers[index] = pointer
                 this.setState({
                     pointers:pointers,

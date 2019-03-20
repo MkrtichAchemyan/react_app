@@ -11,7 +11,7 @@ class Content extends Component{
                 userName:'',
                 userEmail:'',
                 userId:'',
-                pointerId:"",
+                pointerId:'',
                 pointerCountry:'',
                 pointerRegion:'',
                 pointerCity:'',
@@ -30,7 +30,6 @@ class Content extends Component{
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps,"66666666666666666")
         if (this.props.type === 'users'){
             this.setState({
                 userName:nextProps.userFields.name,
@@ -39,8 +38,9 @@ class Content extends Component{
                 userButtonValue:nextProps.userButtonValue
             })
         }
-        else if (this.props.type === 'pointers'){
+        if (this.props.type === 'pointers'){
             this.setState({
+                pointerId:nextProps.pointerFields.id,
                 pointerCountry:nextProps.pointerFields.country,
                 pointerRegion:nextProps.pointerFields.region,
                 pointerCity:nextProps.pointerFields.city,
@@ -49,7 +49,7 @@ class Content extends Component{
                 pointerUser:nextProps.pointerFields.userid,
                 pointerGeo:nextProps.pointerFields.geo,
                 pointerDate:nextProps.pointerFields.date,
-                pointerButtonValue: this.props.pointerButtonValue
+                pointerButtonValue: nextProps.pointerButtonValue
             })
         }
     }
@@ -157,7 +157,6 @@ class Content extends Component{
                              <Form.Group controlId="formBasicName">
                                  <Form.Label><b>Name</b></Form.Label>
                                  <input type="text" placeholder="Name" className='form-control' value={this.state.userName} onChange={this.handleChangeUserName}/>
-                                 <input type="hidden" placeholder="Name" className='form-control' value={this.state.userId}/>
                              </Form.Group>
                              <Form.Group controlId="formBasicEmail">
                                  <Form.Label><b>Email</b></Form.Label>
